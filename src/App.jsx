@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Login from "./components/auth/Login";
 import EmployeeDash from "./components/Dashboard/EmployeeDash";
 import AdminDash from "./components/Dashboard/AdminDash";
-import AuthContext from "./context/AuthContext";
-import TaskContext from "./context/TaskContext";
+import { AuthContext } from "./context/AuthProvider";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const AuthData = useContext(AuthContext);
+
+  useEffect(() => {
+    if (AuthData) {
+      console.log(AuthData.employee);
+    }
+  }, [AuthData]);
+
+  const handleLogin = (email, password) => {
+    // if (email == "admin@gmail.com" && password == "123") {
+    if (
+      AuthData &&
+      AuthData.admin.find((e) => email == e.email && e.password == password)
+    ) {
+      setUser("admin");
+    } else if (
+      AuthData &&
+      AuthData.employee.find((e) => email == e.email && e.password == password)
+    ) {
+      setUser("employee");
+    }
+  };
+
   return (
     <>
-      <AuthContext>
-        <TaskContext>
-          {/* <Login/> */}
-          {/* <EmployeeDash/> */}
-          {/* <AdminDash /> */}
-        </TaskContext>
-      </AuthContext>
+      {!user ? <Login handleLogin={handleLogin} /> : ""}
+      {user === "admin" ? <AdminDash /> : <EmployeeDash />}
     </>
   );
 }

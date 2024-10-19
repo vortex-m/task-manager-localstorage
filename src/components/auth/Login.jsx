@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 
-function Login() {
+function Login({ handleLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const submit = (e) => {
     e.preventDefault();
     console.log("submit");
+    handleLogin(email, password);
     console.log({ email, password });
   };
   return (
-    <div
-      className="flex h-screen justify-center items-center bg-cover bg-center"
-      style={{ backgroundImage: "url('https://source.unsplash.com/random')" }}
-    >
+    <div className="flex h-screen justify-center items-center bg-cover bg-center">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-sm w-full">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={submit}>
