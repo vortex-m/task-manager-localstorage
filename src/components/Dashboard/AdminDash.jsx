@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { TaskContext } from "../../context/TaskContext";
 
 function AdminDash() {
+  const { addTask } = useContext(TaskContext); 
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -19,7 +22,15 @@ function AdminDash() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Task Created:", formData);
+
+    // Add the new task to the context
+    addTask({
+      id: Math.random().toString(36).substr(2, 9),
+      task: formData.title,
+      dueDate: formData.date,
+      description: formData.description,
+    });
+
     setFormData({
       title: "",
       description: "",
@@ -32,7 +43,9 @@ function AdminDash() {
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="p-6 bg-gray-100 rounded-lg w-[70%] mx-auto shadow-md">
-        <h1 className="text-2xl font-semibold text-center mb-10">Admin Dashboard</h1>
+        <h1 className="text-2xl font-semibold text-center mb-10">
+          Admin Dashboard
+        </h1>
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
